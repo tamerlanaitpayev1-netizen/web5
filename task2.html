@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 2: Kanban Board • Aitpayev Tamerlan</title>
+  <meta name="description" content="Agile Kanban board rendered dynamically from a JavaScript array of objects with WIP limits, event delegation, priority sorting, and zero innerHTML.">
+  <link rel="stylesheet" href="style.css">
+  <script src="task2.js" defer></script>
+</head>
+<body>
+
+  <!-- Sticky Top Navigation -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-link">
+        <span class="brand-badge">AITU</span>
+        <span>Assignment 05</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Hub</a></li>
+        <li><a href="task1.html" class="nav-link">Task 1: Battle</a></li>
+        <li><a href="task2.html" class="nav-link active" aria-current="page">Task 2: Kanban</a></li>
+        <li><a href="task3.html" class="nav-link">Task 3: Ticket Builder</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="eyebrow">
+        <span>TASK 02 / ARRAYS, LOOPS &amp; DOM MANIPULATION</span>
+        <span class="badge">Option A: Kanban Board</span>
+      </div>
+      <h1 class="page-title">Agile workflow board</h1>
+      <p class="page-desc">
+        Data-driven project board constructed from a JavaScript array of objects. Features a strict 3-card WIP limit on the middle column, container event delegation, manual loop metrics, and zero innerHTML data rendering.
+      </p>
+      <div class="meta-bar">
+        <div class="meta-item"><span>Student:</span> <strong>Aitpayev Tamerlan</strong></div>
+        <div class="meta-item"><span>Group:</span> <strong>IT-2510</strong></div>
+        <div class="meta-item"><span>WIP Constraint:</span> <strong>Max 3 Active Items</strong></div>
+      </div>
+    </header>
+
+    <!-- Rule Feedback Alert Banner -->
+    <div id="kanban-alert" class="alert alert-warning" role="alert" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      <span id="kanban-alert-message">Action alert</span>
+    </div>
+
+    <!-- Progress & Metrics Bar -->
+    <section class="kanban-metrics-card" aria-label="Sprint Progress Metrics">
+      <div class="metrics-row">
+        <span class="metric-pill">Sprint Completion: <strong id="progress-stats-text">0 of 12 Completed (0%)</strong></span>
+        <span class="metric-pill">Total Velocity: <strong id="points-stats-text">0 / 0 Story Points</strong></span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Sprint Completion Progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <div id="progress-bar-fill" class="progress-fill" style="width: 0%;"></div>
+      </div>
+    </section>
+
+    <!-- Interactive Toolbar: Search, Filters, Sorters -->
+    <section class="kanban-toolbar" aria-label="Board Filters and Controls">
+      <div class="toolbar-controls">
+        <!-- Live Search -->
+        <div class="search-input-wrap">
+          <input 
+            type="search" 
+            id="search-input" 
+            class="form-control" 
+            placeholder="Search by title, tag, or assignee..."
+            aria-label="Search cards"
+          >
+        </div>
+
+        <!-- Tag Filter -->
+        <div style="min-width: 140px;">
+          <select id="filter-tag" class="form-control" aria-label="Filter by tag">
+            <option value="all">All Departments</option>
+            <option value="Frontend">Frontend</option>
+            <option value="Backend">Backend</option>
+            <option value="Security">Security</option>
+            <option value="Database">Database</option>
+            <option value="DevOps">DevOps</option>
+          </select>
+        </div>
+
+        <!-- Priority Sorter -->
+        <div style="min-width: 160px;">
+          <select id="sort-order" class="form-control" aria-label="Sort cards by priority">
+            <option value="default">Default Order</option>
+            <option value="priority-desc">Priority: High to Low</option>
+            <option value="priority-asc">Priority: Low to High</option>
+            <option value="points-desc">Story Points: Highest First</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem;">
+        <button id="btn-open-add-modal" type="button" class="btn btn-primary">
+          <span>+ New Task</span>
+        </button>
+        <button id="btn-reset-data" type="button" class="btn btn-outline" title="Reset dataset">
+          <span>Reset</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Main Kanban Grid (Containers are purely empty in HTML) -->
+    <div id="kanban-board-container" class="kanban-grid" aria-label="Agile Task Columns">
+      
+      <!-- Column 1: To Do -->
+      <section class="kanban-column" id="col-todo" aria-labelledby="col-todo-title">
+        <header class="column-header">
+          <div class="column-title-wrap">
+            <h2 id="col-todo-title" class="column-title">To Do</h2>
+            <span id="todo-count" class="column-count">0</span>
+          </div>
+          <span class="badge badge-neutral">Backlog</span>
+        </header>
+        <div id="todo-cards-container" class="kanban-cards-container"></div>
+      </section>
+
+      <!-- Column 2: In Progress (Enforces WIP Limit <= 3) -->
+      <section class="kanban-column is-wip-limit" id="col-progress" aria-labelledby="col-progress-title">
+        <header class="column-header">
+          <div class="column-title-wrap">
+            <h2 id="col-progress-title" class="column-title">In Progress</h2>
+            <span id="progress-count" class="column-count">0 / 3</span>
+          </div>
+          <span id="wip-limit-badge" class="wip-badge wip-ok">WIP 3</span>
+        </header>
+        <div id="progress-cards-container" class="kanban-cards-container"></div>
+      </section>
+
+      <!-- Column 3: Done -->
+      <section class="kanban-column" id="col-done" aria-labelledby="col-done-title">
+        <header class="column-header">
+          <div class="column-title-wrap">
+            <h2 id="col-done-title" class="column-title">Done</h2>
+            <span id="done-count" class="column-count">0</span>
+          </div>
+          <span class="badge badge-success">Shipped</span>
+        </header>
+        <div id="done-cards-container" class="kanban-cards-container"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Add Task Modal Dialog -->
+  <div id="add-task-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+    <div class="modal-dialog">
+      <div class="card-header">
+        <h2 id="modal-heading" class="card-title">Create New Task</h2>
+        <button id="btn-close-modal" type="button" class="btn btn-outline btn-sm" aria-label="Close dialog">✕</button>
+      </div>
+      <form id="add-task-form">
+        <div class="form-group">
+          <label for="new-task-title" class="form-label">Task Summary</label>
+          <input type="text" id="new-task-title" class="form-control" required placeholder="e.g. Implement WebSockets handshake">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label for="new-task-tag" class="form-label">Department</label>
+            <select id="new-task-tag" class="form-control">
+              <option value="Frontend">Frontend</option>
+              <option value="Backend">Backend</option>
+              <option value="Security">Security</option>
+              <option value="Database">Database</option>
+              <option value="DevOps">DevOps</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="new-task-priority" class="form-label">Priority</label>
+            <select id="new-task-priority" class="form-control">
+              <option value="high">High</option>
+              <option value="medium" selected>Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label for="new-task-points" class="form-label">Story Points</label>
+            <input type="number" id="new-task-points" class="form-control" min="1" max="21" value="3" required>
+          </div>
+
+          <div class="form-group">
+            <label for="new-task-assignee" class="form-label">Assignee</label>
+            <input type="text" id="new-task-assignee" class="form-control" value="Aitpayev" required>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+          <button id="btn-cancel-modal" type="button" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <span>Astana IT University • Web Technologies Assignment 5</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Hub</a>
+        <a href="task1.html">Task 1</a>
+        <a href="task2.html">Task 2</a>
+        <a href="task3.html">Task 3</a>
+        <a href="https://github.com/tamerlanaitpayev1-netizen/web5" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 1: Turn-Based Combat • Aitpayev Tamerlan</title>
+  <meta name="description" content="Turn-based battle browser game with HP bars, defensive shields, healing, critical hits, and action logging. Built with vanilla JavaScript.">
+  <link rel="stylesheet" href="style.css">
+  <script src="task1.js" defer></script>
+</head>
+<body>
+
+  <!-- Sticky Top Navigation -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-link">
+        <span class="brand-badge">AITU</span>
+        <span>Assignment 05</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Hub</a></li>
+        <li><a href="task1.html" class="nav-link active" aria-current="page">Task 1: Battle</a></li>
+        <li><a href="task2.html" class="nav-link">Task 2: Kanban</a></li>
+        <li><a href="task3.html" class="nav-link">Task 3: Ticket Builder</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="eyebrow">
+        <span>TASK 01 / VARIABLES, OPERATORS &amp; CONDITIONS</span>
+        <span class="badge">Option B: Turn-based Battle</span>
+      </div>
+      <h1 class="page-title">Turn-based combat engine</h1>
+      <p class="page-desc">
+        Take tactical control of the Valiant Hero against the Shadow Overlord. Attack, raise your shield to mitigate incoming damage, or consume healing potions. Built with pure JavaScript, strict equality, and zero inline styles.
+      </p>
+      <div class="meta-bar">
+        <div class="meta-item"><span>Student:</span> <strong>Aitpayev Tamerlan</strong></div>
+        <div class="meta-item"><span>Group:</span> <strong>IT-2510</strong></div>
+        <div class="meta-item" id="turn-counter"><span>Turn 0</span></div>
+      </div>
+    </header>
+
+    <!-- Interactive Alert / Message Banner -->
+    <div id="battle-alert" class="alert alert-warning" role="alert" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      <span id="battle-alert-message">Action message</span>
+    </div>
+
+    <!-- Outcome Announcement Banner -->
+    <section id="battle-outcome" class="battle-outcome" aria-live="assertive">
+      <h2 id="outcome-title" class="outcome-title">Outcome</h2>
+      <p id="outcome-desc" class="outcome-desc"></p>
+    </section>
+
+    <!-- Combat Arena: Hero & Enemy Cards -->
+    <section class="battle-arena" aria-label="Combat Arena">
+      <!-- Hero Card -->
+      <article id="hero-card" class="fighter-card is-active">
+        <div class="fighter-header">
+          <div>
+            <h2 class="fighter-name">Valiant Hero</h2>
+            <p class="fighter-role">Player Character</p>
+          </div>
+          <span class="badge badge-primary">Protagonist</span>
+        </div>
+
+        <div class="hp-track" role="progressbar" aria-label="Hero Health" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+          <div id="hero-hp-fill" class="hp-fill" style="width: 100%;"></div>
+        </div>
+
+        <div class="hp-status">
+          <span>Health Points</span>
+          <span id="hero-hp-text">100 / 100 HP</span>
+        </div>
+
+        <div class="fighter-buffs">
+          <span id="hero-defense-buff" class="badge badge-primary" style="display: none;">Shield Active (-50% DMG)</span>
+        </div>
+      </article>
+
+      <!-- Enemy Card -->
+      <article id="enemy-card" class="fighter-card">
+        <div class="fighter-header">
+          <div>
+            <h2 class="fighter-name">Shadow Overlord</h2>
+            <p class="fighter-role">AI Opponent</p>
+          </div>
+          <span class="badge badge-danger">Hostile</span>
+        </div>
+
+        <div class="hp-track" role="progressbar" aria-label="Enemy Health" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+          <div id="enemy-hp-fill" class="hp-fill" style="width: 100%;"></div>
+        </div>
+
+        <div class="hp-status">
+          <span>Health Points</span>
+          <span id="enemy-hp-text">100 / 100 HP</span>
+        </div>
+
+        <div class="fighter-buffs">
+          <span class="badge badge-neutral">Aggressive AI</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- Action Controls -->
+    <section class="battle-controls" aria-label="Battle Command Panel">
+      <div class="controls-grid">
+        <button id="btn-attack" type="button" class="btn btn-primary btn-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"></path><path d="M13 19l6-6"></path><path d="M16 16l4 4"></path><path d="M19 21l2-2"></path></svg>
+          <span>Strike Enemy</span>
+          <span class="btn-action-hint">8–15 DMG (10% Crit)</span>
+        </button>
+
+        <button id="btn-defend" type="button" class="btn btn-secondary btn-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>Raise Shield</span>
+          <span class="btn-action-hint">Halve next incoming hit</span>
+        </button>
+
+        <button id="btn-heal" type="button" class="btn btn-secondary btn-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+          <span>Heal (+20 HP)</span>
+          <span class="btn-action-hint" id="heal-count-badge">3 / 3 Left</span>
+        </button>
+
+        <button id="btn-restart" type="button" class="btn btn-outline btn-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+          <span>Restart Match</span>
+          <span class="btn-action-hint">Reset without reloading</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Battle Log of Last 5 Actions -->
+    <section class="battle-log-card" aria-label="Combat Action Log">
+      <div class="card-header">
+        <h2 class="card-title">Combat Action Log</h2>
+        <span class="badge badge-neutral">Last 5 Events</span>
+      </div>
+      <ul id="action-log-list" class="log-list" aria-live="polite">
+        <!-- Rendered cleanly via JavaScript DOM -->
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <span>Astana IT University • Web Technologies Assignment 5</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Hub</a>
+        <a href="task1.html">Task 1</a>
+        <a href="task2.html">Task 2</a>
+        <a href="task3.html">Task 3</a>
+        <a href="https://github.com/tamerlanaitpayev1-netizen/web5" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

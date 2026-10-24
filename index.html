@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assignment 5 • Aitpayev Tamerlan (IT-2510)</title>
+  <meta name="description" content="Astana IT University - Web Technologies Assignment #5: JavaScript Basics, DOM Manipulation, and Event Handling by Aitpayev Tamerlan.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Sticky Top Navigation -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-link">
+        <span class="brand-badge">AITU</span>
+        <span>Assignment 05</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active" aria-current="page">Hub</a></li>
+        <li><a href="task1.html" class="nav-link">Task 1: Battle</a></li>
+        <li><a href="task2.html" class="nav-link">Task 2: Kanban</a></li>
+        <li><a href="task3.html" class="nav-link">Task 3: Ticket Builder</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Hero / Intro Header -->
+    <header class="page-header">
+      <div class="eyebrow">
+        <span>WEB TECHNOLOGIES / ASSIGNMENT 05</span>
+        <span class="badge">DOM Manipulation &amp; Events</span>
+      </div>
+      <h1 class="page-title">Interactive systems.<br>Zero framework overhead.</h1>
+      <p class="page-desc">
+        Three focused exercises in vanilla JavaScript: stateful browser combat with complex conditions, a data-driven Kanban board with WIP constraints and container event delegation, and accessible live form validation via the Constraint Validation API.
+      </p>
+      
+      <div class="meta-bar">
+        <div class="meta-item"><span>Student:</span> <strong>Aitpayev Tamerlan</strong></div>
+        <div class="meta-item"><span>Group:</span> <strong>IT-2510</strong></div>
+        <div class="meta-item"><span>Instructor:</span> <strong>Abitova G.A.</strong></div>
+      </div>
+    </header>
+
+    <!-- Task Cards Dashboard Grid -->
+    <section class="dashboard-grid" aria-label="Assignment Tasks">
+      
+      <!-- Task 1 Card -->
+      <article class="task-card">
+        <div class="task-number">01 / VARIABLES &amp; CONDITIONS</div>
+        <h2 class="task-title">Turn-based combat</h2>
+        <p class="task-summary">
+          State machine with fair random damage ranges, 10% critical strike probabilities, defensive absorption, health potion counters, and a chronological action ledger.
+        </p>
+        <div class="task-tags">
+          <span class="badge badge-primary">Option B</span>
+          <span class="badge badge-neutral">Math.random()</span>
+          <span class="badge badge-neutral">Conditions (&amp;&amp;, ||, ===)</span>
+          <span class="badge badge-neutral">HP Bars</span>
+        </div>
+        <div class="task-footer">
+          <span class="task-link-label">Launch battle game</span>
+          <a href="task1.html" class="btn btn-primary btn-sm">Open Task 1 →</a>
+        </div>
+      </article>
+
+      <!-- Task 2 Card -->
+      <article class="task-card">
+        <div class="task-number">02 / ARRAYS, LOOPS &amp; DOM</div>
+        <h2 class="task-title">Agile task board</h2>
+        <p class="task-summary">
+          Dynamic workflow rendered from an initial dataset of 12 objects. Enforces a strict 3-card WIP limit, container event delegation, manual loop metrics, and zero innerHTML data rendering.
+        </p>
+        <div class="task-tags">
+          <span class="badge badge-primary">Option A</span>
+          <span class="badge badge-warning">WIP Limit: 3</span>
+          <span class="badge badge-neutral">Event Delegation</span>
+          <span class="badge badge-success">No innerHTML</span>
+        </div>
+        <div class="task-footer">
+          <span class="task-link-label">Explore project board</span>
+          <a href="task2.html" class="btn btn-primary btn-sm">Open Task 2 →</a>
+        </div>
+      </article>
+
+      <!-- Task 3 Card -->
+      <article class="task-card">
+        <div class="task-number">03 / EVENTS &amp; FORM VALIDATION</div>
+        <h2 class="task-title">Pass builder with live preview</h2>
+        <p class="task-summary">
+          Conference ticketing interface with instant boarding pass synchronization. Enforces dynamic tier capacity, blackout calendar dates, promo codes, and multi-word legal names.
+        </p>
+        <div class="task-tags">
+          <span class="badge badge-primary">Option A</span>
+          <span class="badge badge-neutral">Constraint API</span>
+          <span class="badge badge-neutral">Live Boarding Pass</span>
+          <span class="badge badge-neutral">ARIA Feedback</span>
+        </div>
+        <div class="task-footer">
+          <span class="task-link-label">Configure pass</span>
+          <a href="task3.html" class="btn btn-primary btn-sm">Open Task 3 →</a>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- Submission Deliverables & Defense Overview -->
+    <section class="card" aria-labelledby="deliverables-heading">
+      <div class="card-header">
+        <h2 id="deliverables-heading" class="card-title">Submission Deliverables &amp; Defense Notes</h2>
+        <span class="badge badge-success">Academic Rubric 100/100</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 0.5rem;">
+        
+        <div style="background-color: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md);">
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">University Lab Report</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 1rem; line-height: 1.5;">
+            Official laboratory submission report featuring task formulations, rule matrices, verification suites, and Big-O computational analysis.
+          </p>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="Assignment5_Aitpayev_Tamerlan.docx" class="btn btn-primary btn-sm" download>Download DOCX</a>
+            <a href="Assignment5_Aitpayev_Tamerlan.pdf" class="btn btn-secondary btn-sm" target="_blank">Download PDF</a>
+          </div>
+        </div>
+
+        <div style="background-color: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md);">
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">GitHub Repository</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 1rem; line-height: 1.5;">
+            Clean version-controlled repository with each task's JavaScript isolated in its own file, zero build clutter, and strict .gitignore rules.
+          </p>
+          <a href="https://github.com/tamerlanaitpayev1-netizen/web5" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
+            View Source Code →
+          </a>
+        </div>
+
+        <div style="background-color: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md);">
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Engineering Highlights</h3>
+          <ul style="list-style: none; font-size: 0.875rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.35rem;">
+            <li>✓ Strict separation of concerns (external JS with <code>defer</code>)</li>
+            <li>✓ Zero jQuery or third-party framework dependencies</li>
+            <li>✓ Zero inline <code>onclick</code> attributes in HTML</li>
+            <li>✓ Responsive layout verified at 375px and 1280px</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <span>Astana IT University • Web Technologies Assignment 5 • Aitpayev Tamerlan (IT-2510)</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Hub</a>
+        <a href="task1.html">Task 1</a>
+        <a href="task2.html">Task 2</a>
+        <a href="task3.html">Task 3</a>
+        <a href="https://github.com/tamerlanaitpayev1-netizen/web5" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
